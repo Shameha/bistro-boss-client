@@ -2,10 +2,16 @@
 
 import { useEffect, useState } from "react";
 import SectionTitle from "../../../Componants/SectionTitle/SectionTitle";
+// import useMenu from "../../../hooks/useMenu";
+
+
 import MenuItem from "../../Shared/MenuItem/MenuItem";
+
 // import { data } from "autoprefixer";
 
 const PopularMenu = () => {
+
+
 const [menu,setMenu] = useState([]);
 
 
@@ -18,6 +24,7 @@ const [menu,setMenu] = useState([]);
 
       })
     },[])
+
     return (
         <section className="mb-12">
             <SectionTitle
