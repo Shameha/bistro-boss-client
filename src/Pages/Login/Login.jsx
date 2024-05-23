@@ -1,10 +1,17 @@
 // import React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
+import { AuthContext } from '../../Provider/AuthProvider';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import Swal from 'sweetalert2';
 const Login = () => {
-const captchaRef = useRef(null);
+
 const [disabled,setDisabled] = useState(true)
-    useEffect(() =>{
+const {signIn} = useContext(AuthContext);    
+
+
+useEffect(() =>{
         loadCaptchaEnginge(6); 
     },[])
 
@@ -14,10 +21,34 @@ const [disabled,setDisabled] = useState(true)
     const email = form.email.value;
     const password = form.password.value;
     console.log(email,password);
+     signIn(email,password)
+     .then(result =>{
+      const user = result.user;
+      console.log(user);
+      Swal.fire({
+        title: "User login sucessfull",
+        showClass: {
+          popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+          `
+        },
+        hideClass: {
+          popup: `
+            animate__animated
+            animate__fadeOutDown
+            animate__faster
+          `
+        }
+      });
+     })
+
+
 
     }
-    const handleValidateCaptcha = () =>{
-     const user_captcha_value = captchaRef.current.value;
+    const handleValidateCaptcha = (event) =>{
+     const user_captcha_value = event.target.value;
      if(validateCaptcha(user_captcha_value)){
     setDisabled(false);
      }
@@ -29,7 +60,9 @@ const [disabled,setDisabled] = useState(true)
 
 
     return (
-        <div className="hero min-h-screen bg-base-200">
+       <>
+        <Helmet><title>Bistro | Login </title></Helmet>
+       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center md:w-1/2 lg:text-left">
             <h1 className="text-5xl font-bold">Login now!</h1>
@@ -56,16 +89,17 @@ const [disabled,setDisabled] = useState(true)
                 <label className="label">
                 <LoadCanvasTemplate />
                 </label>
-                <input ref={captchaRef} type="text" name="captcha" placeholder="write the avobe captcha" className="input input-bordered" required />
-                <button onClick={handleValidateCaptcha} className="btn btn-xs mt-4">Validate</button>
+                <input  onBlur={handleValidateCaptcha} type="text" name="captcha" placeholder="write the avobe captcha" className="input input-bordered" required />
               </div>
               <div className="form-control mt-6">
               <input disabled={disabled} className="btn btn-primary" type="submit" value="Login" />
               </div>
             </form>
+            <p> <small>New Here ? <Link to="/signup">creat an account</Link></small> </p>
           </div>
         </div>
       </div>
+       </>
     );
 };
 
