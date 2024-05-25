@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Provider/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 // import React from 'react';
@@ -11,11 +12,12 @@ import { Link } from "react-router-dom";
 const SignUp = () => {
     const {
         register,
-        handleSubmit,
+        handleSubmit,reset,
         formState: { errors },
       } = useForm()
 
-const{createUser} = useContext(AuthContext);
+const{createUser,updateUseprofile} = useContext(AuthContext);
+const navigate = useNavigate();
 
       const onSubmit = (data) =>{
          console.log(data);
@@ -23,6 +25,20 @@ const{createUser} = useContext(AuthContext);
          .then(result =>{
             const loggedUser = result.user;
             console.log(loggedUser);
+            updateUseprofile(data.name,data.photo)
+            .then(()=>{
+                 console.log('user profile');
+                 reset();
+                 Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "User created suceessfully",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                navigate('/');
+            })
+            .catch(error => console.log(error))
          })
 
         };
@@ -45,6 +61,13 @@ const{createUser} = useContext(AuthContext);
           </label>
           <input type="text" placeholder="Name" {...register("name",{ required: true })} name="name" className="input input-bordered" />
           {errors.name && <span className="text-red-600">This field is required</span>}
+        </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Photo</span>
+          </label>
+          <input type="text" placeholder="Photo Url" {...register("photo",{ required: true })} name="photo" className="input input-bordered" />
+          {errors.photo && <span className="text-red-600">This field is required</span>}
         </div>
         <div className="form-control">
           <label className="label">
