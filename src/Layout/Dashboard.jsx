@@ -1,16 +1,35 @@
 // import React from 'react';
 
-import { FaAd, FaCalendar, FaHome, FaList, FaSearch, FaShoppingCart } from "react-icons/fa";
+import { FaAd, FaCalendar, FaHome, FaList, FaSearch, FaShoppingCart, FaUtensils, FaVoicemail } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useCart from "../hook/useCart";
 
 const Dashboard = () => {
     const[cart] = useCart();
+    const isAdmin = true;
     return (
         <div className="flex">
             <div className="w-64 min-h-screen bg-orange-400">
                 <ul className="menu p-4">
+                {
+                    isAdmin ? <>
+                    <li>
+                    <NavLink to='/dashboard/adminHome'><FaHome></FaHome> Admin Home</NavLink>
+                </li>
                 <li>
+                    <NavLink to='/dashboard/cart'><FaShoppingCart></FaShoppingCart> My cart ({cart.length})</NavLink>
+                </li>
+                <li>
+                    <NavLink to='/dashboard/addItems'><FaUtensils></FaUtensils> Added new items</NavLink>
+                </li>
+                <li>
+                    <NavLink to='/dashboard/bookings'><FaAd></FaAd> Add Booking</NavLink>
+                </li>
+                <li>
+                    <NavLink to='/dashboard/users'><FaList></FaList>All Users</NavLink>
+                </li>
+                    </> :<>
+                    <li>
                     <NavLink to='/dashboard/userHome'><FaHome></FaHome> My Home</NavLink>
                 </li>
                 <li>
@@ -25,12 +44,17 @@ const Dashboard = () => {
                 <li>
                     <NavLink to='/dashboard/book'><FaList></FaList> My booking</NavLink>
                 </li>
+                    </>
+                }
                 <div className="divider"></div>
                 <li>
                     <NavLink to='/'><FaHome></FaHome> My Home</NavLink>
                 </li>
                 <li>
                     <NavLink to='/order/salad'><FaSearch></FaSearch> Menu</NavLink>
+                </li>
+                <li>
+                    <NavLink to='/order/contact'><FaVoicemail></FaVoicemail>contact</NavLink>
                 </li>
                 </ul>
             </div>

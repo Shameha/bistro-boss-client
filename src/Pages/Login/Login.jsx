@@ -5,12 +5,14 @@ import { AuthContext } from '../../Provider/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
+import SocialLogin from '../../Componants/SocialLogin/SocialLogin';
 const Login = () => {
 
 const [disabled,setDisabled] = useState(true)
 const {signIn} = useContext(AuthContext);  
 const navigate = useNavigate();
 const location = useLocation();
+
 
 const from = location.state?.from?.pathname || "/"
 
@@ -102,6 +104,7 @@ useEffect(() =>{
               </div>
             </form>
             <p> <small>New Here ? <Link to="/signup">creat an account</Link></small> </p>
+        <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>

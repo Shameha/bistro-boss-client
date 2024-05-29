@@ -4,12 +4,14 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hook/useAxiosPublic";
 
 
 // import React from 'react';
 
 
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic();
     const {
         register,
         handleSubmit,reset,
@@ -28,15 +30,25 @@ const navigate = useNavigate();
             updateUseprofile(data.name,data.photo)
             .then(()=>{
                  console.log('user profile');
-                 reset();
-                 Swal.fire({
-                  position: "top-end",
-                  icon: "success",
-                  title: "User created suceessfully",
-                  showConfirmButton: false,
-                  timer: 1500
-                });
-                navigate('/');
+                  const userInfo ={
+                    name: data.name,
+                    email : data.email
+                  }
+
+                 axiosPublic.post('/users',userInfo)
+                 .then(res=>{
+                  if(res.data.insertedId)
+                    console.log('user added to database');
+                    reset();
+                    Swal.fire({
+                     position: "top-end",
+                     icon: "success",
+                     title: "User created suceessfully",
+                     showConfirmButton: false,
+                     timer: 1500
+                   });
+                   navigate('/');
+                 })
             })
             .catch(error => console.log(error))
          })
@@ -92,7 +104,7 @@ const navigate = useNavigate();
           <input className="btn btn-primary" type="submit" value="SignUp" />
         </div>
       </form>
-      <p>Alredy have an account<Link to="/login">Login</Link></p>
+      <p className="px-6">Alredy have an account<Link to="/login">Login</Link></p>
     </div>
   </div>
 </div>
