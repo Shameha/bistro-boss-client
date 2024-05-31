@@ -67,7 +67,7 @@ setLoading(false);
  return () =>{
    return unsubscribe();
  }
-},[])
+},[axiosPublic])
 
     const authInfo ={
 user,
